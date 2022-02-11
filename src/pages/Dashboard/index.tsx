@@ -13,7 +13,7 @@ interface CepProps {
 
 const Dashboard: React.FC = () => {
   const [newCep, setNewCep] = useState('');
-
+  const [ceps, setCep] = useState<CepProps[]>([]);
 
   const pesquisarCEP = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -22,7 +22,9 @@ const Dashboard: React.FC = () => {
       const response = await api.get(`${newCep}/json/`);
       const cepDados = response.data;
 
-      console.log(cepDados);
+      setCep([...ceps, cepDados]);
+
+      
   } catch(err) {
 
   }
@@ -41,34 +43,17 @@ const Dashboard: React.FC = () => {
         <button type="submit">Pesquisar</button>
       </Form>
       <Ceps>
-        <a href="#">
-          <p className="uf">SC</p>
-          <div>
-            <strong>Jaraguá do Sul</strong>
-            <p>Rua: Isidoro Pedri</p>
-            <p>Bairro: Barra do Rio Molha</p>
-            <p>CEP: 89253-387</p>
-          </div>
-        </a>
-
-        <a href="#">
-          <p className="uf">SC</p>
-          <div>
-            <strong>Jaraguá do Sul</strong>
-            <p>Rua: Isidoro Pedri</p>
-            <p>Bairro: Barra do Rio Molha</p>
-            <p>CEP: 89253-387</p>
-          </div>
-        </a>
-        <a href="#">
-          <p className="uf">SC</p>
-          <div>
-            <strong>Jaraguá do Sul</strong>
-            <p>Rua: Isidoro Pedri</p>
-            <p>Bairro: Barra do Rio Molha</p>
-            <p>CEP: 89253-387</p>
-          </div>
-        </a>
+        {ceps.map(cep => (
+          <a href="#">
+            <p className="uf">{cep.uf}</p>
+            <div>
+              <strong>{cep.localidade}</strong>
+              <p>{cep.logradouro}</p>
+              <p>{cep.bairro}</p>
+              <p>CEP: {cep.cep}</p>
+            </div>
+          </a>
+        ))}
       </Ceps>
     </Container>
   );
